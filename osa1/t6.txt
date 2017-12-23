@@ -1,0 +1,25 @@
+kayttaja->selain: kayttaja kirjoittaa muistiinpanon input-kenttään
+kayttaja->selain: käyttäjä klikkaa Talleta -painiketta
+
+note left of selain
+selain luo uuden muistiinpano-olion, lisää sen 
+muistiinpanot sisältävään taulukkoon, tyhjentää lomakkeen,
+lisää kaikki muistiinpanot (myös uuden muistiinpanon) HTML-sivulle,
+ja lähettää lopuksi uuden muistiinpanon palvelimelle
+end note
+
+selain->palvelin: 
+note left of palvelin
+POST fullstack-exampleapp.herokuapp.com/new_note_spa, 
+datana käyttäjän antama muistiinpano
+end note
+
+note left of palvelin
+Palvelin lisää vastaanottamansa muistiinpano-olion notes -taulukkoon
+end note
+
+palvelin->selain: status 201, viesti "note created"
+
+note left of selain
+selain tulostaa viestin "note created" konsoliin
+end note

@@ -1,0 +1,35 @@
+kayttaja->selain:
+note left of selain
+kayttaja klikkaa muistiinpanot -linkkiä 
+end note
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/notes
+note left of palvelin
+  muodostetaan muistiinpanot -sivun HTML 
+end note
+palvelin->selain: status 200, sivun HTML-koodi
+
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/main.css
+palvelin->selain: status 200, css
+
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/main.js
+palvelin->selain: status 200, js
+
+note left of selain
+ selain suorittaa main.js tiedoston Javascript -koodin
+end note
+
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/data.json
+note left of palvelin
+  palvelin muodostaa muistiinpanoista JSON objektin
+end note
+
+palvelin->selain: status 200, muistiinpanot JSONina
+
+note left of selain
+ selain tulostaa JSONin konsoliin ja lisää sivulle bullet-listan muistiinpanoista
+end note
+
+note left of selain
+ lopputuloksena käyttäjä näkee HTML-sivun, jossa on käytetty main.css tiedoston muotoiluja,
+ ja jossa näytetään muistiinpanot bullet-listalla
+end note

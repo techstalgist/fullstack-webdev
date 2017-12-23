@@ -1,0 +1,36 @@
+kayttaja->selain: kayttaja menee osoitteeseen fullstack-exampleapp.herokuapp.com/spa
+
+selain->palvelin: 
+note left of palvelin
+GET fullstack-exampleapp.herokuapp.com/spa
+end note
+
+palvelin->selain: muistiinpanojen html-sivu
+
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/main.css
+palvelin->selain: status 200, css
+
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/spa.js
+palvelin->selain: status 200, js
+
+note left of selain
+ selain suorittaa spa.js tiedoston Javascript -koodin.
+ tässä yhteydessä lomakkeelle notes_form rekisteröidään tapahtumankäsittelijä.
+end note
+
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/data.json
+note left of palvelin
+  palvelin muodostaa muistiinpanoista JSON objektin 
+  (uusi muistiinpano mukana)
+end note
+
+palvelin->selain: status 200, muistiinpanot JSONina
+
+note left of selain
+ selain lisää sivulle bullet-listan muistiinpanoista
+end note
+
+note left of selain
+ lopputuloksena käyttäjä näkee HTML-sivun, jossa on käytetty main.css tiedoston muotoiluja,
+ ja jossa näytetään muistiinpanot bullet-listalla
+end note
