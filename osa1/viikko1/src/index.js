@@ -16,15 +16,19 @@ const Osa = (props) => {
 const Sisalto = (props) => {
     return (
         <div>
-            <Osa nimi={props.osat[0].nimi} tehtavia={props.osat[0].tehtavia} />
-            <Osa nimi={props.osat[1].nimi} tehtavia={props.osat[1].tehtavia} />
-            <Osa nimi={props.osat[2].nimi} tehtavia={props.osat[2].tehtavia} />
+            {props.osat.map((o) => {
+                    return (
+                        <Osa key={o.nimi} nimi={o.nimi} tehtavia={o.tehtavia} />
+                    )
+                }
+            )}    
         </div>
     )
 }
 
 const Yhteensa = (props) => {
-    const lkm = props.osat[0].tehtavia + props.osat[1].tehtavia+ props.osat[2].tehtavia;
+    let lkm = 0;
+    props.osat.forEach((o) => lkm += o.tehtavia);
     return (
         <p>yhteensä {lkm} tehtävää</p>
     )
