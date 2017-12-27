@@ -1,18 +1,55 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-//TODO Continue from JSX header on https://mluukkai.github.io/osa1/
-const App = () => {
-    const now = new Date()
-    const a = 10
-    const b = 20
+const Otsikko = (props) => {
+    return (
+        <h1>{props.kurssi}</h1>
+    )
+}
+
+const Osa = (props) => {
+    return (
+        <p>{props.nimi} {props.tehtavia}</p>
+    )
+}
+
+const Sisalto = (props) => {
     return (
         <div>
-         <p>Hello world, it is {now.toString()}</p>
-         <p>{a} plus {b} is {a + b}</p>
+            <Osa nimi={props.osa1} tehtavia={props.tehtavia1} />
+            <Osa nimi={props.osa2} tehtavia={props.tehtavia2} />
+            <Osa nimi={props.osa3} tehtavia={props.tehtavia3} />
         </div>
     )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const Yhteensa = (props) => {
+    return (
+        <p>yhteensä {props.lkm} tehtävää</p>
+    )
+}
 
+const App = () => {
+  const kurssi = 'Half Stack -sovelluskehitys'
+  const osa1 = 'Reactin perusteet'
+  const tehtavia1 = 10
+  const osa2 = 'Tiedonvälitys propseilla'
+  const tehtavia2 = 7
+  const osa3 = 'Komponenttien tila'
+  const tehtavia3 = 14
+
+  return (
+    <div>
+      <Otsikko kurssi={kurssi}/>
+      <Sisalto osa1={osa1} tehtavia1={tehtavia1} 
+      osa2={osa2} tehtavia2={tehtavia2} 
+      osa3={osa3} tehtavia3={tehtavia3} />
+      <Yhteensa lkm={tehtavia1 + tehtavia2 + tehtavia3}/>
+    </div>
+  )
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+)
