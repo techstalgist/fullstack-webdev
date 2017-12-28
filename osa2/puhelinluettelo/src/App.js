@@ -38,6 +38,15 @@ const Kentta = ({name, value, onChange}) => {
   )
 }
 
+const Ilmoitus = ({message}) => {
+  if (message.length === 0) {
+    return null
+  }
+  return (
+    <div className='message'>{message}</div>
+  )
+}
+
 class App extends React.Component {
   constructor(props){
     super(props)
@@ -45,7 +54,8 @@ class App extends React.Component {
       persons: [],
       newName: '',
       newNumber: '',
-      filter: ''
+      filter: '',
+      message: ''
     }
   }
 
@@ -73,8 +83,12 @@ class App extends React.Component {
       if (window.confirm(`Poistetaanko ${personToDelete.name}?`)) {
         personService.deleteOne(id).then(response => {
           this.setState({
-            persons: this.state.persons.filter(p => p.id !== id)
+            persons: this.state.persons.filter(p => p.id !== id),
+            message: `Henkilö ${personToDelete.name} poistettiin.`
           })
+          setTimeout(() => {
+            this.setState({message: ''})
+          }, 4000)
         })
       }
     }
@@ -91,7 +105,26 @@ class App extends React.Component {
         this.setState({
           persons: nonChangedPersons.concat(updatedPerson),
           newName: '',
-          newNumber: ''
+          newNumber: '',
+          message: `Henkilön ${updatedPerson.name} numeroa muutettiin.`
+        })
+        setTimeout(() => {
+          this.setState({message: ''})
+        }, 4000)
+      })
+      .catch(error => {
+        alert(`Henkilö '${changedPerson.name}' on jo valitettavasti poistettu palvelimelta.`)
+        personService.create(changedPerson).then(createdPerson => {
+          const nonChangedPersons = this.state.persons.filter(p => p.id !== changedPerson.id)
+          this.setState({
+            persons: nonChangedPersons.concat(createdPerson),
+            newName: '',
+            newNumber: '',
+            message: `Henkilön ${createdPerson.name} numero lisättiin.`
+          })
+          setTimeout(() => {
+            this.setState({message: ''})
+          }, 4000)
         })
       })
       return
@@ -101,8 +134,12 @@ class App extends React.Component {
       this.setState({
         persons: this.state.persons.concat(createdPerson),
         newName: '',
-        newNumber: ''
+        newNumber: '',
+        message: `Henkilön ${createdPerson.name} numero lisättiin.`
       })
+      setTimeout(() => {
+        this.setState({message: ''})
+      }, 4000)
     })
   }
 
@@ -112,6 +149,7 @@ class App extends React.Component {
     return (
       <div>
         <h1>Puhelinluettelo</h1>
+        <Ilmoitus message={this.state.message}/>
         <Kentta name={"rajaa näytettäviä"} value={this.state.filter} onChange={this.handleFilterChange} />
         <h2>Lisää uusi/muuta olemassaolevan numeroa</h2>
         <form onSubmit={this.addPerson}>
