@@ -1,30 +1,24 @@
 const list = require('../utils/list_helper')
 
 const first =  {
-    _id: '123',
     title: 'foobar',
     author: 'Mark Twain',
     url: 'www.google.com',
-    likes: 4,
-    __v: 0
+    likes: 4
 }
 
 const second = {
-    _id: '124',
     title: 'foobar2',
     author: 'Mark Twain',
     url: 'www.google.com',
-    likes: 5,
-    __v: 0
+    likes: 5
 }
 
 const third = {
-    _id: '125',
     title: 'Old Man and the Sea',
     author: 'Ernest Hemingway',
     url: 'www.google.com',
-    likes: 8,
-    __v: 0
+    likes: 8
 }
 
 const blogs = [first, second, third]
@@ -84,3 +78,5 @@ describe('most likes', () => {
         expect(result.likes).toBe(9)
     })
 })
+
+module.exports = blogs
