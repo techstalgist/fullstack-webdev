@@ -1,27 +1,5 @@
 const list = require('../utils/list_helper')
-
-const first =  {
-    title: 'foobar',
-    author: 'Mark Twain',
-    url: 'www.google.com',
-    likes: 4
-}
-
-const second = {
-    title: 'foobar2',
-    author: 'Mark Twain',
-    url: 'www.google.com',
-    likes: 5
-}
-
-const third = {
-    title: 'Old Man and the Sea',
-    author: 'Ernest Hemingway',
-    url: 'www.google.com',
-    likes: 8
-}
-
-const blogs = [first, second, third]
+const {initialBlogs} = require('./test_helper')
 const emptyList = []
 
 describe('total likes', () => {
@@ -31,7 +9,7 @@ describe('total likes', () => {
     })
 
     test('of a bigger list is calculated correctly', () => {
-        const result = list.totalLikes(blogs)
+        const result = list.totalLikes(initialBlogs)
         expect(result).toBe(17)
     })
 })
@@ -44,8 +22,8 @@ describe('favorite blog', () => {
     })
 
     test('of a bigger list is correct', () => {
-        const result = list.favoriteBlog(blogs)
-        expect(result).toBe(third)
+        const result = list.favoriteBlog(initialBlogs)
+        expect(result).toBe(initialBlogs[2])
     })
 })
 
@@ -57,7 +35,7 @@ describe('most blogs', () => {
     })
 
     test('of a bigger list is correct', () => {
-        const result = list.mostBlogs(blogs)
+        const result = list.mostBlogs(initialBlogs)
         
         expect(result.author).toBe('Mark Twain')
         expect(result.blogs).toBe(2)
@@ -72,11 +50,9 @@ describe('most likes', () => {
     })
 
     test('of a bigger list is correct', () => {
-        const result = list.mostLikes(blogs)
+        const result = list.mostLikes(initialBlogs)
         
         expect(result.author).toBe('Mark Twain')
         expect(result.likes).toBe(9)
     })
 })
-
-module.exports = blogs
