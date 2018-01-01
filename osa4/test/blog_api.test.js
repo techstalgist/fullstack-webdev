@@ -112,6 +112,30 @@ describe('when initially some blogs are saved', async () => {
             expect(newBlogs.length).toBe(oldBlogs.length-1)
         })
     })
+
+    describe('updating a blog', async () => {
+        let blogToUpdate
+        beforeAll(async () => {
+            const blogs = await blogsInDb()
+            blogToUpdate = blogs[0]
+        })
+
+        test('updating likes and title using PUT /api/blogs/:id succeeds', async () => {
+            const updatedBlog = {
+                ...blogToUpdate._doc,
+                likes: 5,
+                title: 'A new title'
+            }
+            await api
+                .put(`/api/blogs/${blogToUpdate._id}`)
+                .send(updatedBlog)
+                .expect(200)
+            const newBlogs = await blogsInDb()
+            const targetBlog = newBlogs.find(b => b._id.toString() === blogToUpdate._id.toString())
+            expect(targetBlog.likes).toBe(5)
+            expect(targetBlog.title).toBe('A new title')
+        })
+    })
 })
 
 afterAll(() => {
