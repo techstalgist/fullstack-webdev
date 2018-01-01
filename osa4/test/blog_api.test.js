@@ -91,6 +91,27 @@ describe('when initially some blogs are saved', async () => {
                 .expect(400)
         })
     })
+
+    describe('deletion of a blog', async () => {
+        let addedBlog
+
+        beforeAll(async () => {
+            addedBlog = new Blog({author: 'Maija', title:'Reseptejä', url: 'www.hyvablogi.net'})
+            await addedBlog.save()
+        })
+        test('DELETE /api/blogs/:id succeeds with a proper statuscode', async () => {
+            const oldBlogs = await blogsInDb()
+
+            await api
+                .delete(`/api/blogs/${addedBlog._id}`)
+                .expect(204)
+            
+            const newBlogs = await blogsInDb()
+            const titles = newBlogs.map(b => b.title)
+            expect(titles).not.toContain(addedBlog.title)
+            expect(newBlogs.length).toBe(oldBlogs.length-1)
+        })
+    })
 })
 
 afterAll(() => {
