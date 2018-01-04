@@ -13,8 +13,9 @@ mongoose.connect(config.mongoUrl, { useMongoClient: true })
 mongoose.Promise = global.Promise
 
 const blogsRouter = require('./controllers/blogs')
-
+const usersRouter = require('./controllers/users')
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
 
 const PORT = config.port
 const server = http.createServer(app)
