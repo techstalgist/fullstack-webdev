@@ -10,7 +10,7 @@ usersRouter.post('/', async (req, res) => {
         if (existingUser.length > 0) {
             return res.status(400).json({error: 'username must be unique'})
         }
-        if (body.password.length < 3) {
+        if (!body.password || body.password.length < 3) {
             return res.status(400).json({error: 'minimum password length is 3 characters'})
         }
 
@@ -31,17 +31,30 @@ usersRouter.post('/', async (req, res) => {
     }
 })
 
+const formatBlog = (blog) => {
+    return {
+        _id: blog._id,
+        likes: blog.likes,
+        author: blog.author,
+        title: blog.title,
+        url: blog.url
+    }
+}
+
 const formatUser = (user) => {
     return {
         _id: user._id,
         username: user.username,
         name: user.name,
-        adult: user.adult
+        adult: user.adult,
+        blogs: user.blogs.map(formatBlog)
     }
 }
 
 usersRouter.get('/', async (req, res) => {
-    const users = await User.find({})
+    const users = await User
+        .find({})
+        .populate('blogs')
     res.json(users.map(formatUser))
 })
 

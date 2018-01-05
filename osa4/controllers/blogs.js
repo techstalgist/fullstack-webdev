@@ -1,20 +1,54 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+
+const formatBlog = (blog) => {
+  return {
+    _id: blog._id,
+    likes: blog.likes,
+    author: blog.author,
+    title: blog.title,
+    url: blog.url,
+    user: {
+      _id: blog.user.id,
+      username: blog.user.username,
+      name: blog.user.name
+    }
+  }
+}
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
-  response.json(blogs)
+  const blogs = await Blog
+    .find({})
+    .populate('user')
+  response.json(blogs.map(formatBlog))
 })
   
 blogsRouter.post('/', async (request, response) => {
-  if (!request.body.title || !request.body.url) {
-    response.status(400).end()
-    return
+  try {
+    const body = request.body
+    if (!body.title || !body.url) {
+      response.status(400).end()
+      return
+    }
+    const users = await User.find({})
+    const firstUser = users[0]
+    let blog = new Blog({
+      title: body.title,
+      url: body.url,
+      likes: body.likes || 0,
+      author: body.author,
+      user: firstUser._id
+    })
+    const saveResult = await blog.save()
+    firstUser.blogs = firstUser.blogs.concat(saveResult._id)
+    await firstUser.save()
+    response.status(201).json(saveResult)
+  } catch (e) {
+    console.log(e)
+    response.status(500).json({error: 'something went wrong'})
   }
-  let blog = new Blog(request.body)
-  if (!request.body.likes) { blog.likes = 0 }
-  const saveResult = await blog.save()
-  response.status(201).json(saveResult)
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
