@@ -1,9 +1,5 @@
-const dummy = (blogs) => {
-    return 1
-}
-
 const totalLikes = (blogs) => {
-    const summaaja = (acc, alkuarvo) => acc + alkuarvo; 
+    const summaaja = (acc, alkuarvo) => acc + alkuarvo
     return blogs.map(el => el.likes).reduce(summaaja, 0)
 }
 
@@ -62,7 +58,6 @@ const mostLikes = (blogs) => {
 }
 
 module.exports = {
-    dummy,
     totalLikes,
     favoriteBlog,
     mostBlogs,

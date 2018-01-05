@@ -154,12 +154,12 @@ describe('when initially some blogs are saved', async () => {
         test('DELETE fails if user is not the creator of the blog to be deleted', async () => {
             const allUsers = await User.find({})
             const user2 = allUsers.find(u => u._id !== user._id)
-            addedBlog = new Blog({author: 'Maija2', title:'Reseptejä2', url: 'www.hyvablogi2.net', user: user2._id})
-            await addedBlog.save()
+            const addedBlog2 = new Blog({author: 'Maija2', title:'Reseptejä2', url: 'www.hyvablogi2.net', user: user2._id})
+            await addedBlog2.save()
             const oldBlogs = await blogsInDb()
 
             await api
-                .delete(`/api/blogs/${addedBlog._id}`)
+                .delete(`/api/blogs/${addedBlog2._id}`)
                 .set('Authorization', `bearer ${token}`)
                 .expect(401)
             

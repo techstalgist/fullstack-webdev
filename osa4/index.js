@@ -26,13 +26,13 @@ const PORT = config.port
 const server = http.createServer(app)
 
 server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`)
 })
 
 server.on('close', () => {
-  mongoose.connection.close()
+    mongoose.connection.close()
 })
 
 module.exports = {
-  app, server
+    app, server
 }
