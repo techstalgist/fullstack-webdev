@@ -3,13 +3,15 @@ const { app, server } = require('../index')
 const api = supertest(app)
 
 const User = require('../models/user')
-
 const { usersInDb } = require('./test_helper')
+const bcrypt = require('bcrypt')
 
 describe('when there is initially one user in db', async () => {
     beforeAll(async () => {
         await User.remove({})
-        const user = new User({username:'root', password: 'rootpass'})
+        const salt = 10
+        const passwordHash = await bcrypt.hash('rootpass', salt)
+        const user = new User({username:'root', name:'root user', passwordHash: passwordHash, adult: true})
         await user.save()
     })
 
@@ -73,8 +75,22 @@ describe('when there is initially one user in db', async () => {
         const newUsers = await usersInDb()
         expect(newUsers.length).toBe(oldUsers.length)
     })
-})
 
-afterAll(() => {
-    server.close()
+    test('POST /api/login logs in an existing user', async () => {
+        const userToLogin = {
+            username: 'root',
+            password: 'rootpass'
+        }
+
+        const response = await api
+            .post('/api/login')
+            .send(userToLogin)
+            .expect(200)
+
+        expect(response.body.username).toBe('root')
+    })
+
+    afterAll(() => {
+        server.close()
+    })
 })

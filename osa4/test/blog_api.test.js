@@ -2,13 +2,36 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const { initialBlogs, blogsInDb } = require('./test_helper')
-
+const bcrypt = require('bcrypt')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+let token, user
+
+const getTokenForNewUser = async () => {
+    const salt = 10
+    const passwordHash = await bcrypt.hash('rootpass', salt)
+    const newUser = new User({username:'root2', name:'root user2', passwordHash: passwordHash, adult: true})
+    await newUser.save()
+    const userToLogin = {
+        username: 'root2',
+        password: 'rootpass'
+    }
+    const response = await api
+        .post('/api/login')
+        .send(userToLogin)
+    token = response.body.token
+    user = newUser
+}
 
 describe('when initially some blogs are saved', async () => {
     beforeAll(async () => {
+        await getTokenForNewUser()
         await Blog.remove({})
-        const objects = initialBlogs.map(b => new Blog(b))
+        const objects = initialBlogs.map(b => new Blog({
+            ...b,
+            user: user._id
+        }))
         const promiseArray = objects.map(b => b.save())
         await Promise.all(promiseArray)
     })
@@ -41,6 +64,7 @@ describe('when initially some blogs are saved', async () => {
         
             await api
                 .post('/api/blogs')
+                .set('Authorization', `bearer ${token}`)
                 .send(newBlog)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
@@ -60,6 +84,7 @@ describe('when initially some blogs are saved', async () => {
             }
             await api
                 .post('/api/blogs')
+                .set('Authorization', `bearer ${token}`)
                 .send(newBlog)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
@@ -76,6 +101,7 @@ describe('when initially some blogs are saved', async () => {
             }
             await api
                 .post('/api/blogs')
+                .set('Authorization', `bearer ${token}`)
                 .send(newBlog)
                 .expect(400)
         })
@@ -87,6 +113,7 @@ describe('when initially some blogs are saved', async () => {
             }
             await api
                 .post('/api/blogs')
+                .set('Authorization', `bearer ${token}`)
                 .send(newBlog)
                 .expect(400)
         })
@@ -96,7 +123,7 @@ describe('when initially some blogs are saved', async () => {
         let addedBlog
 
         beforeAll(async () => {
-            addedBlog = new Blog({author: 'Maija', title:'Reseptejä', url: 'www.hyvablogi.net'})
+            addedBlog = new Blog({author: 'Maija', title:'Reseptejä', url: 'www.hyvablogi.net', user: user._id})
             await addedBlog.save()
         })
         test('DELETE /api/blogs/:id succeeds with a proper statuscode', async () => {
@@ -104,12 +131,40 @@ describe('when initially some blogs are saved', async () => {
 
             await api
                 .delete(`/api/blogs/${addedBlog._id}`)
+                .set('Authorization', `bearer ${token}`)
                 .expect(204)
             
             const newBlogs = await blogsInDb()
             const titles = newBlogs.map(b => b.title)
             expect(titles).not.toContain(addedBlog.title)
             expect(newBlogs.length).toBe(oldBlogs.length-1)
+        })
+
+        test('DELETE fails without a token', async () => {
+            const oldBlogs = await blogsInDb()
+
+            await api
+                .delete(`/api/blogs/${addedBlog._id}`)
+                .expect(401)
+            
+            const newBlogs = await blogsInDb()
+            expect(newBlogs.length).toBe(oldBlogs.length)
+        })
+
+        test('DELETE fails if user is not the creator of the blog to be deleted', async () => {
+            const allUsers = await User.find({})
+            const user2 = allUsers.find(u => u._id !== user._id)
+            addedBlog = new Blog({author: 'Maija2', title:'Reseptejä2', url: 'www.hyvablogi2.net', user: user2._id})
+            await addedBlog.save()
+            const oldBlogs = await blogsInDb()
+
+            await api
+                .delete(`/api/blogs/${addedBlog._id}`)
+                .set('Authorization', `bearer ${token}`)
+                .expect(401)
+            
+            const newBlogs = await blogsInDb()
+            expect(newBlogs.length).toBe(oldBlogs.length)
         })
     })
 
@@ -136,8 +191,8 @@ describe('when initially some blogs are saved', async () => {
             expect(targetBlog.title).toBe('A new title')
         })
     })
-})
 
-afterAll(() => {
-  server.close()
+    afterAll(() => {
+        server.close()
+    })
 })

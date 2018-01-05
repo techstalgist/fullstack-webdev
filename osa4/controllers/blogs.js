@@ -1,7 +1,7 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
-
+const jwt = require('jsonwebtoken')
 
 const formatBlog = (blog) => {
   return {
@@ -27,37 +27,60 @@ blogsRouter.get('/', async (request, response) => {
   
 blogsRouter.post('/', async (request, response) => {
   try {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!request.token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
     const body = request.body
     if (!body.title || !body.url) {
       response.status(400).end()
       return
     }
-    const users = await User.find({})
-    const firstUser = users[0]
+    const user = await User.findById(decodedToken.id)
+
     let blog = new Blog({
       title: body.title,
       url: body.url,
       likes: body.likes || 0,
       author: body.author,
-      user: firstUser._id
+      user: user._id
     })
     const saveResult = await blog.save()
-    firstUser.blogs = firstUser.blogs.concat(saveResult._id)
-    await firstUser.save()
+    user.blogs = user.blogs.concat(saveResult._id)
+    await user.save()
     response.status(201).json(saveResult)
   } catch (e) {
-    console.log(e)
-    response.status(500).json({error: 'something went wrong'})
+    if (e.name === 'JsonWebTokenError') {
+      response.status(401).json({error: e.message})
+    } else {
+      console.log(e)
+      response.status(500).json({error: 'something went wrong'})
+    }
   }
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
   try {
-    await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!request.token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+    const user = await User.findById(decodedToken.id)
+    const blog = await Blog.findById(request.params.id)
+    if (blog.user.toString() === user._id.toString()) {
+      await blog.remove()
+      return response.status(204).end()
+    } else {
+      return response.status(401).json({error: 'only the blog creator can delete a blog'})
+    }
   } catch (e) {
-    console.log(e)
-    response.status(400).json({error: 'malformatted id'})
+    if (e.name === 'JsonWebTokenError') {
+      response.status(401).json({error: e.message})
+    } else {
+      console.log(e)
+      response.status(500).json({error: 'something went wrong'})
+    }
   }
 })
 
