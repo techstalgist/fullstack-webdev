@@ -24,6 +24,11 @@ class NewBlog extends React.Component {
         }
         try {
             const createdBlog = await blogService.create(newBlog)
+            this.setState({
+                title: '',
+                author: '',
+                url: ''
+            })
             this.props.addBlog(createdBlog)
         } catch (e) {
             console.log(e)

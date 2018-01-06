@@ -40,14 +40,27 @@ class App extends React.Component {
   }
 
   addBlog = (blog) => {
-
     this.setState({ 
-      blogs: this.state.blogs.concat(blog),
+      blogs: this.state.blogs.concat(blog).sort(this.byLikes),
       success: `a new blog ${blog.title} by ${blog.author} added`
     })
     setTimeout(() => {
       this.setState({ success: '' })
     }, 4000)
+  }
+
+  byLikes = (p1, p2) => p2.likes - p1.likes
+
+  updateBlog = (blog) => {
+    const otherBlogs = this.state.blogs.filter(b => b._id !== blog._id)
+    const currentBlog = this.state.blogs.find(b => b._id === blog._id)
+    const updatedBlog = {
+      ...currentBlog,
+      likes: currentBlog.likes + 1
+    }
+    this.setState({ 
+      blogs: otherBlogs.concat(updatedBlog).sort(this.byLikes)
+    })
   }
 
   logout = (e) => {
@@ -57,9 +70,10 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    blogService.getAll().then(blogs =>
-      this.setState({ blogs })
-    )
+    blogService.getAll().then(blogs => {
+      const sortedBlogs = blogs.sort(this.byLikes)
+      this.setState({ blogs: sortedBlogs })
+    })
 
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
@@ -87,7 +101,7 @@ class App extends React.Component {
           <div>
             <h3>existing blogs</h3>
             {this.state.blogs.map(blog => 
-              <Blog key={blog._id} blog={blog}/>
+              <Blog updateBlog={this.updateBlog} key={blog._id} blog={blog}/>
             )}
           </div>
       </div>
