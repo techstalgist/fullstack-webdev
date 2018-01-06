@@ -4,25 +4,29 @@ const Login = ({login, username, handleChange, password}) => (
         <h2>Log in to application</h2>
 
         <form onSubmit={login}>
-          <div>
-            username 
-            <input
-              type="text"
-              name="username"
-              value={username}
-              onChange={handleChange}
-            />
+          <div className="row">
+            <div className="column left">username</div>
+            <div className="column right"> 
+              <input
+                type="text"
+                name="username"
+                value={username}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-          <div>
-            password 
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={handleChange}
-            />
+          <div className="row">
+            <div className="column left">password</div>
+            <div className="column right"> 
+              <input
+                type="password"
+                name="password"
+                value={password}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-          <button>kirjaudu</button>
+          <button>log in</button>
         </form>
     </div > 
 )
