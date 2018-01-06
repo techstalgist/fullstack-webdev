@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import Login from './components/Login'
 import Notification from './components/Notification'
 import NewBlog from './components/NewBlog'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -76,11 +77,13 @@ class App extends React.Component {
 
     const contents = () => (
       <div>
-          <div className="row">
+          <div className="row margin-bottom">
             <div className="column wide">{this.state.user.name} logged in</div>
             <div className="column"> <button onClick={this.logout}>logout</button></div>  
           </div>
-          <NewBlog addBlog={this.addBlog}/>
+          <Togglable buttonLabel="new blog">
+            <NewBlog addBlog={this.addBlog}/>
+          </Togglable>
           <div>
             <h3>existing blogs</h3>
             {this.state.blogs.map(blog => 
@@ -107,4 +110,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default App

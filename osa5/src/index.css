@@ -18,6 +18,10 @@
     width: 40%
 }
 
+.margin-bottom {
+    margin-bottom: 1em
+}
+
 /* Clear floats after the columns */
 .row:after {
     content: "";
