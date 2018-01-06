@@ -30,12 +30,26 @@ class Blog extends React.Component {
     } catch (e) {
         console.log(e)
     }
-}
+  }
+
+  deleteBlog = async (e) => {
+    const blog = this.props.blog
+    const confirmed = window.confirm(`Delete ${blog.title} by ${blog.author} ?`)
+    if (confirmed) {
+      try {
+        await blogService.deleteBlog(blog._id)
+        this.props.deleteBlog(blog._id)
+      } catch (e) {
+        console.log(e)
+      } 
+    }
+  }
 
   render() {
     const {title, author, url, likes, user} = this.props.blog
+    const loggedInUser = this.props.loggedInUser
     const showWhenVisible = { display: this.state.showDetails ? '' : 'none' }
-
+    const canDelete = (loggedInUser && (user.username === loggedInUser.username))
     return (
       <div className="blog-style">
         <div onClick={this.toggleDetails}>{title}, author: {author}</div>
@@ -46,6 +60,9 @@ class Blog extends React.Component {
               <button className="margin-left-sm" onClick={this.updateBlog}>like</button>
             </div>
             <div>added by {user.name}</div>
+            <div>
+              {canDelete ? <button onClick={this.deleteBlog}>delete</button> : null}
+            </div>
         </div>
         </div>
       </div> 

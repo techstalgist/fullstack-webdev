@@ -63,6 +63,13 @@ class App extends React.Component {
     })
   }
 
+  deleteBlog = (id) => {
+    const otherBlogs = this.state.blogs.filter(b => b._id !== id)
+    this.setState({ 
+      blogs: otherBlogs.sort(this.byLikes)
+    })
+  }
+
   logout = (e) => {
     this.setState({ username: '', password: '', user: null})
     blogService.setToken(null)
@@ -101,7 +108,7 @@ class App extends React.Component {
           <div>
             <h3>existing blogs</h3>
             {this.state.blogs.map(blog => 
-              <Blog updateBlog={this.updateBlog} key={blog._id} blog={blog}/>
+              <Blog updateBlog={this.updateBlog} deleteBlog={this.deleteBlog} loggedInUser={this.state.user} key={blog._id} blog={blog}/>
             )}
           </div>
       </div>
