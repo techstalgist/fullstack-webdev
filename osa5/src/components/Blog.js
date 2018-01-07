@@ -52,8 +52,8 @@ class Blog extends React.Component {
     const canDelete = (loggedInUser && (user.username === loggedInUser.username))
     return (
       <div className="blog-style">
-        <div onClick={this.toggleDetails}>{title}, author: {author}</div>
-        <div style={showWhenVisible}>
+        <div onClick={this.toggleDetails} className="basic-info">{title}, author: {author}</div>
+        <div style={showWhenVisible} className="togglable-content">
           <div className="margin-left-sm">
             <a href={url}>{url}</a>
             <div>{likes} likes
@@ -63,7 +63,7 @@ class Blog extends React.Component {
             <div>
               {canDelete ? <button onClick={this.deleteBlog}>delete</button> : null}
             </div>
-        </div>
+          </div>
         </div>
       </div> 
     )
