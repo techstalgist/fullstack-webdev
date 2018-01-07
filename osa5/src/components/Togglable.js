@@ -1,6 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 class Togglable extends React.Component {
+
+    static propTypes = {
+      buttonLabel: PropTypes.string.isRequired
+    }
+    
     constructor(props) {
       super(props)
       this.state = {

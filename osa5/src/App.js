@@ -115,7 +115,7 @@ class App extends React.Component {
     )
 
     const showNotication = (msg, success) => (
-      <Notification message={msg} success={success} />
+      <Notification message={msg} success={success}/>
     )
     return (
       <div>
