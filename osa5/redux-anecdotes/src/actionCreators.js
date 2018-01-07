@@ -4,6 +4,13 @@ const actionFor = {
             type: 'VOTE',
             id
         }
+    },
+
+    creating(content) {
+        return {
+            type: 'NEW',
+            content
+        }
     }
 }
 

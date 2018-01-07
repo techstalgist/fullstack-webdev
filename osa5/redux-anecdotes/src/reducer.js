@@ -28,6 +28,10 @@ const reducer = (store = initialState, action) => {
       const anecdoteToChange = store.find(a => a.id === id)
       const changedAnecdote = { ...anecdoteToChange, votes: anecdoteToChange.votes + 1 }
       return [...otherAnecdotes, changedAnecdote]
+    
+    case 'NEW':
+      const newAnecdoteObj = asObject(action.content)
+      return [...store, newAnecdoteObj]
     default:
       return store
   }

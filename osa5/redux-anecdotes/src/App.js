@@ -7,17 +7,27 @@ class App extends React.Component {
     this.props.store.dispatch(actionFor.voting(id))
   }
 
+  addAnecdote = (e) => {
+    e.preventDefault()
+    const content = e.target.newAnecdote.value
+    this.props.store.dispatch(actionFor.creating(content))
+    e.target.newAnecdote.value = ''
+  }
+
   render() {
-    const byId = (a1, a2) => a1.id - a2.id
-    const anecdotes = this.props.store.getState().sort(byId)
+    const byVotes = (a1, a2) => a2.votes - a1.votes
+    const anecdotes = this.props.store.getState().sort(byVotes)
     const buttonStyle = {
       marginLeft: 5
+    }
+    const marginBottom = {
+      marginBottom: 5
     }
     return (
       <div>
         <h2>Anecdotes</h2>
         {anecdotes.map(anecdote=>
-          <div key={anecdote.id}>
+          <div key={anecdote.id} style={marginBottom}>
             <div>
               {anecdote.content} 
             </div>
@@ -28,8 +38,8 @@ class App extends React.Component {
           </div>
         )}
         <h2>create new</h2>
-        <form>
-          <div><input /></div>
+        <form onSubmit={this.addAnecdote}>
+          <div><input name="newAnecdote"/></div>
           <button>create</button> 
         </form>
       </div>
