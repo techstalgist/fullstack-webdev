@@ -81,7 +81,6 @@ class App extends React.Component {
       const sortedBlogs = blogs.sort(this.byLikes)
       this.setState({ blogs: sortedBlogs })
     })
-
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -97,7 +96,7 @@ class App extends React.Component {
   render() {
 
     const contents = () => (
-      <div>
+      <div className='contents'>
           <div className="row margin-bottom">
             <div className="column wide">{this.state.user.name} logged in</div>
             <div className="column"> <button onClick={this.logout}>logout</button></div>  
