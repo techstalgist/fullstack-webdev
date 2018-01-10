@@ -2,6 +2,7 @@ import React from 'react'
 import {voteAdding} from '../reducers/anecdoteReducer'
 import {show, hide} from '../reducers/notificationReducer'
 
+
 class AnecdoteList extends React.Component {
 
   handleVoteAdd = (id) => (e) => {
@@ -13,11 +14,16 @@ class AnecdoteList extends React.Component {
   }
 
   render() {
-    const anecdotes = this.props.store.getState().anecdotes
+    const anecdotesToShow = () => {
+      const anecdotes = this.props.store.getState().anecdotes
+      const filter = this.props.store.getState().filter
+      if (filter.length === 0) { return anecdotes }
+      return anecdotes.filter(a => a.content.includes(filter))
+    }
     return (
       <div>
         <h2>Anecdotes</h2>
-        {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
+        {anecdotesToShow().sort((a, b) => b.votes - a.votes).map(anecdote =>
           <div key={anecdote.id}>
             <div>
               {anecdote.content}
