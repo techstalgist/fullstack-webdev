@@ -1,0 +1,11 @@
+{
+  "name": "redux-anecdotes-backend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "json-server": "^0.12.1"
+  },
+  "scripts": {
+    "start": "json-server --watch db.json --port 3002"
+  }
+}
