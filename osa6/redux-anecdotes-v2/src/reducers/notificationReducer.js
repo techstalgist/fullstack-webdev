@@ -11,17 +11,16 @@
         return store
     }
   }
-  
-  export const show = (message) => {
-    return {
-      type: 'SHOW',
-      message
-    }
-  }
-  
-  export const hide = () => {
-    return {
-      type: 'HIDE'
+
+  export const notify = (message, seconds) => {
+    return async (dispatch) => {
+      await dispatch({
+        type: 'SHOW',
+        message
+      })
+      setTimeout(() => dispatch({
+        type: 'HIDE'
+      }), seconds*1000)
     }
   }
   
