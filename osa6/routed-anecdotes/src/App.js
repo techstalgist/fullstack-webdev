@@ -69,7 +69,7 @@ class App extends React.Component {
           <div>
             <Menu />
             <Notification message={message} />
-            <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
+            <Route exact path="/" render={() => <AnecdoteList vote={this.vote} anecdotes={this.state.anecdotes} />} />
             <Route path="/create" render={({history}) => <CreateNew addNew={this.addNew} history={history}/>} />
             <Route path="/about" render={() => <About />} />
             <Route exact path="/anecdotes/:id" render={({match}) => 

@@ -1,26 +1,24 @@
 import React from 'react'
-import {NavLink} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
+import {Navbar, Nav, NavItem} from 'react-bootstrap'
 
-const Menu = () => {
-  const background = {
-    fontSize: '20px',
-    borderStyle: 'solid',
-    borderRadius: '15px',
-    padding: '10px',
-    marginTop: '10px',
-    marginBottom: '10px',
-    backgroundColor: '#6fe4ffd6'
-  }
-  const active = {
-    backgroundColor: '#adb9e6'
-  }
+const Menu = ({location}) => {
+
   return (
-    <div style={background}>    
-      <NavLink exact to="/" activeStyle={active}>anecdotes</NavLink>&nbsp;
-      <NavLink exact to="/create" activeStyle={active}>create new</NavLink>&nbsp;
-      <NavLink exact to="/about" activeStyle={active}>about</NavLink>&nbsp;
-    </div>
+    <Navbar>
+      <Nav>
+        <NavItem componentClass={Link} href="/" to="/" active={location.pathname === '/'}>
+          anecdotes
+        </NavItem>
+        <NavItem componentClass={Link} href="/create" to="/create" active={location.pathname === '/create'}>
+          create new
+        </NavItem>
+        <NavItem componentClass={Link} href="/about" to="/about" active={location.pathname === '/about'}>
+          about
+        </NavItem>
+      </Nav>
+    </Navbar>
   )
 }
 
-export default Menu
+export default withRouter(Menu)
