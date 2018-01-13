@@ -7,6 +7,7 @@ import Blogs from './components/Blogs'
 import Blog from './components/Blog'
 import Users from './components/Users'
 import User from './components/User'
+import Menu from './components/Menu'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import userService from './services/users'
@@ -119,10 +120,7 @@ class App extends React.Component {
     }
     const contents = () => (
       <div className='contents'>
-          <div className="row margin-bottom">
-            <div className="column wide">{this.state.user.name} logged in</div>
-            <div className="column"> <button onClick={this.logout}>logout</button></div>  
-          </div>
+          <Menu user={this.state.user.name} logout={this.logout}/>
           <Togglable buttonLabel="new blog">
             <NewBlog addBlog={this.addBlog}/>
           </Togglable>
