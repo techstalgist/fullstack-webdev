@@ -81,14 +81,18 @@ class App extends React.Component {
     window.localStorage.removeItem('loggedUser')
   }
 
+  fetchUsers = () => {
+    userService.getAll().then(users => {
+      this.setState({users})
+    })
+  }
+
   componentWillMount() {
     blogService.getAll().then(blogs => {
       const sortedBlogs = blogs.sort(this.byLikes)
       this.setState({ blogs: sortedBlogs })
     })
-    userService.getAll().then(users => {
-      this.setState({users})
-    })
+    this.fetchUsers()
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -117,7 +121,7 @@ class App extends React.Component {
           <Route exact path="/" render={() => <Blogs blogs={this.state.blogs} user={this.state.user} updateBlog={this.updateBlog} deleteBlog={this.deleteBlog}/>} />
           <Route exact path="/users" render={() => <Users users={this.state.users}/>} />
           <Route exact path="/users/:id" render={({match}) => 
-              <User user={userById(match.params.id)} />
+              <User user={userById(match.params.id)} fetchUsers={this.fetchUsers} />
           }/>
       </div>
     )
