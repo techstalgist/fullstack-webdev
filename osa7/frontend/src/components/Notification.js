@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
 
 const Notification = ({message, success}) => {
     if (message.length === 0) {
@@ -11,9 +11,14 @@ const Notification = ({message, success}) => {
     )
 }
 
-Notification.propTypes = {
-  message: PropTypes.string.isRequired,
-  success: PropTypes.bool.isRequired
+const mapStateToProps = (state) => {
+  return {
+    message: state.notification.message,
+    success: state.notification.success
+  }
 }
 
-export default Notification
+export default connect(
+  mapStateToProps,
+  null
+)(Notification)

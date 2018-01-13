@@ -9,7 +9,6 @@ import Users from './components/Users'
 import User from './components/User'
 import Menu from './components/Menu'
 import blogService from './services/blogs'
-import loginService from './services/login'
 import userService from './services/users'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
@@ -18,31 +17,9 @@ class App extends React.Component {
     super(props)
     this.state = {
       blogs: [],
-      user: null,
       users: [],
-      username: '',
-      password: '',
       error: '',
       success: ''
-    }
-  }
-
-  login = async (e) => {
-    e.preventDefault()
-    try{
-      const user = await loginService.login({
-        username: this.state.username,
-        password: this.state.password
-      })
-
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      this.setState({ username: '', password: '', user})
-    } catch(exception) {
-      this.setState({error: 'username or password incorrect'})
-      setTimeout(() => {
-        this.setState({error: ''})
-      }, 4000)
     }
   }
 
@@ -119,12 +96,7 @@ class App extends React.Component {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       blogService.setToken(user.token)
-      this.setState({user})
     }
-  }
-
-  handleLoginFieldChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value })
   }
 
   render() {
@@ -136,13 +108,13 @@ class App extends React.Component {
     }
     const contents = () => (
       <div className='contents'>
-          <Menu user={this.state.user.name} logout={this.logout}/>
+          <Menu user={'foobar'} logout={this.logout}/>
           <Togglable buttonLabel="new blog">
             <NewBlog addBlog={this.addBlog}/>
           </Togglable>
           <Route exact path="/" render={() => <Blogs blogs={this.state.blogs}/>} />
           <Route exact path="/blogs/:id" render={({match}) =>
-            <Blog blog={blogById(match.params.id)} fetchBlogs={this.fetchBlogs} loggedInUser={this.state.user} updateBlog={this.updateBlog} 
+            <Blog blog={blogById(match.params.id)} fetchBlogs={this.fetchBlogs} loggedInUser={undefined} updateBlog={this.updateBlog} 
             deleteBlog={this.deleteBlog} addCommentToBlog={this.addCommentToBlog} />
           }/>
           <Route exact path="/users" render={() => <Users users={this.state.users}/>} />
@@ -151,21 +123,13 @@ class App extends React.Component {
           }/>
       </div>
     )
-
-    const showNotication = (msg, success) => (
-      <Notification message={msg} success={success}/>
-    )
     return (
       <div>
         <h2>blogs</h2>
         <Router>
           <div>
-            {this.state.success.length > 0 && showNotication(this.state.success, true)}
-            {this.state.error.length > 0 && showNotication(this.state.error, false)}
-            {this.state.user === null ? 
-              <Login username={this.state.username} password={this.state.password} 
-                  handleChange={this.handleLoginFieldChange} login={this.login}/> 
-              : contents()}
+            <Notification />
+            {1 === 1 ? <Login /> : contents()}
           </div>
         </Router>
         
