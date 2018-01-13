@@ -9,7 +9,6 @@ const Menu = () => {
     padding: '10px',
     marginTop: '10px',
     marginBottom: '10px',
-    width:'40%',
     backgroundColor: '#6fe4ffd6'
   }
   const active = {

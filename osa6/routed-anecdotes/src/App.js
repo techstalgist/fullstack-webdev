@@ -63,7 +63,7 @@ class App extends React.Component {
     const anecdoteById = (id) => 
       this.state.anecdotes.find(a => a.id === Number(id))
     return (
-      <div>
+      <div className="container">
         <h1>Software anecdotes</h1>
         <Router>
           <div>
