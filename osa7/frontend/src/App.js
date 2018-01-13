@@ -70,6 +70,22 @@ class App extends React.Component {
     })
   }
 
+  addCommentToBlog = (id, comment) => {
+    const otherBlogs = this.state.blogs.filter(b => b._id !== id)
+    const currentBlog = this.state.blogs.find(b => b._id === id)
+    const updatedBlog = {
+      ...currentBlog,
+      comments: [...currentBlog.comments, comment]
+    }
+    this.setState({
+      blogs: otherBlogs.concat(updatedBlog).sort(this.byLikes),
+      success: `comment '${comment.content}' added to blog '${updatedBlog.title}'`
+    })
+    setTimeout(() => {
+      this.setState({ success: '' })
+    }, 4000)
+  }
+
   deleteBlog = (id) => {
     const otherBlogs = this.state.blogs.filter(b => b._id !== id)
     this.setState({ 
@@ -126,7 +142,8 @@ class App extends React.Component {
           </Togglable>
           <Route exact path="/" render={() => <Blogs blogs={this.state.blogs}/>} />
           <Route exact path="/blogs/:id" render={({match}) =>
-            <Blog blog={blogById(match.params.id)} fetchBlogs={this.fetchBlogs} loggedInUser={this.state.user} updateBlog={this.updateBlog} deleteBlog={this.deleteBlog} />
+            <Blog blog={blogById(match.params.id)} fetchBlogs={this.fetchBlogs} loggedInUser={this.state.user} updateBlog={this.updateBlog} 
+            deleteBlog={this.deleteBlog} addCommentToBlog={this.addCommentToBlog} />
           }/>
           <Route exact path="/users" render={() => <Users users={this.state.users}/>} />
           <Route exact path="/users/:id" render={({match}) => 

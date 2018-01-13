@@ -1,11 +1,38 @@
 import React from 'react'
 import blogService from '../services/blogs'
+import Comments from './Comments'
 
 class Blog extends React.Component {
   
+  constructor(props) {
+    super(props)
+    this.state = {
+      comment: ''
+    }
+  }
+
   componentWillMount() {
     if (this.props.blog === undefined) {
       this.props.fetchBlogs()
+    }
+  }
+
+  changeComment = (e) => {
+    const comment = e.target.value
+    this.setState({comment})
+  }
+
+  addComment = async (e) => {
+    const id = this.props.blog._id
+    const commentToSend = {
+      content: this.state.comment
+    }
+    this.setState({comment: ''})
+    try {
+      const newComment = await blogService.newComment(id, commentToSend)
+      this.props.addCommentToBlog(id, newComment)
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -43,7 +70,7 @@ class Blog extends React.Component {
 
   render() {
     if (this.props.blog === undefined) { return null }
-    const {title, author, url, likes, user} = this.props.blog
+    const {title, author, url, likes, user, comments} = this.props.blog
     const loggedInUser = this.props.loggedInUser
     const canDelete = (loggedInUser && (user.username === loggedInUser.username))
     return (
@@ -60,6 +87,8 @@ class Blog extends React.Component {
         <div>
           {canDelete ? <button onClick={this.deleteBlog}>delete</button> : null}
         </div>
+        <Comments comments={comments} comment={this.state.comment} 
+          changeComment={this.changeComment} addComment={this.addComment} />
       </div> 
     )
   }
