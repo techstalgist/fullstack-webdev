@@ -11,7 +11,6 @@ class CreateNew extends React.Component {
     }
   
     handleChange = (e) => {
-      console.log(e.target.name, e.target.value)
       this.setState({ [e.target.name]: e.target.value })
     }
   
@@ -23,6 +22,7 @@ class CreateNew extends React.Component {
         info: this.state.info,
         votes: 0
       })
+      this.props.history.push('/')
     }
   
     render() {

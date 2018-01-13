@@ -2,6 +2,9 @@ import React from 'react'
 
 const Anecdote = ({anecdote}) => {
 
+    if(anecdote === undefined) {
+        return (<div></div>)
+    }
     return (
         <div>
             <h1>{anecdote.content} by {anecdote.author}</h1>

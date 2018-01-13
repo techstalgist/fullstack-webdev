@@ -6,6 +6,7 @@ import AnecdoteList from './components/AnecdoteList'
 import Footer from './components/Footer'
 import CreateNew from './components/CreateNew'
 import Anecdote from './components/Anecdote'
+import Notification from './components/Notification'
 
 class App extends React.Component {
   constructor() {
@@ -33,8 +34,13 @@ class App extends React.Component {
   }
 
   addNew = (anecdote) => {
-    anecdote.id = (Math.random() * 10000).toFixed(0)
-    this.setState({ anecdotes: this.state.anecdotes.concat(anecdote) })
+    anecdote.id = Number((Math.random() * 10000).toFixed(0))
+    this.setState({ 
+      anecdotes: this.state.anecdotes.concat(anecdote),
+      notification: `A new anecdote '${anecdote.content}' created!` })
+    setTimeout(() => {
+      this.setState({notification: ''})
+    }, 10000)
   }
 
   anecdoteById = (id) =>
@@ -49,24 +55,22 @@ class App extends React.Component {
     }
 
     const anecdotes = this.state.anecdotes.map(a => a.id === id ? voted : a)
-
     this.setState({ anecdotes })
   }
 
-  
-
   render() {
+    const message = this.state.notification
     const anecdoteById = (id) => 
       this.state.anecdotes.find(a => a.id === Number(id))
-    
     return (
       <div>
         <h1>Software anecdotes</h1>
         <Router>
           <div>
             <Menu />
+            <Notification message={message} />
             <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
-            <Route path="/create" render={() => <CreateNew addNew={this.addNew}/>} />
+            <Route path="/create" render={({history}) => <CreateNew addNew={this.addNew} history={history}/>} />
             <Route path="/about" render={() => <About />} />
             <Route exact path="/anecdotes/:id" render={({match}) => 
               <Anecdote anecdote={anecdoteById(match.params.id)} />
