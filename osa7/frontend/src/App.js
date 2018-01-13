@@ -1,11 +1,14 @@
 import React from 'react'
-import Blog from './components/Blog'
 import Login from './components/Login'
 import Notification from './components/Notification'
 import NewBlog from './components/NewBlog'
 import Togglable from './components/Togglable'
+import Blogs from './components/Blogs'
+import Users from './components/Users'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import userService from './services/users'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 class App extends React.Component {
   constructor(props) {
@@ -13,6 +16,7 @@ class App extends React.Component {
     this.state = {
       blogs: [],
       user: null,
+      users: [],
       username: '',
       password: '',
       error: '',
@@ -81,6 +85,9 @@ class App extends React.Component {
       const sortedBlogs = blogs.sort(this.byLikes)
       this.setState({ blogs: sortedBlogs })
     })
+    userService.getAll().then(users => {
+      this.setState({users})
+    })
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -104,12 +111,8 @@ class App extends React.Component {
           <Togglable buttonLabel="new blog">
             <NewBlog addBlog={this.addBlog}/>
           </Togglable>
-          <div>
-            <h3>existing blogs</h3>
-            {this.state.blogs.map(blog => 
-              <Blog updateBlog={this.updateBlog} deleteBlog={this.deleteBlog} loggedInUser={this.state.user} key={blog._id} blog={blog}/>
-            )}
-          </div>
+          <Route exact path="/" render={() => <Blogs blogs={this.state.blogs} user={this.state.user} updateBlog={this.updateBlog} deleteBlog={this.deleteBlog}/>} />
+          <Route exact path="/users" render={() => <Users users={this.state.users}/>} />
       </div>
     )
 
@@ -119,12 +122,17 @@ class App extends React.Component {
     return (
       <div>
         <h2>blogs</h2>
-        {this.state.success.length > 0 && showNotication(this.state.success, true)}
-        {this.state.error.length > 0 && showNotication(this.state.error, false)}
-        {this.state.user === null ? 
-          <Login username={this.state.username} password={this.state.password} 
-                 handleChange={this.handleLoginFieldChange} login={this.login}/> 
-          : contents()}
+        <Router>
+          <div>
+            {this.state.success.length > 0 && showNotication(this.state.success, true)}
+            {this.state.error.length > 0 && showNotication(this.state.error, false)}
+            {this.state.user === null ? 
+              <Login username={this.state.username} password={this.state.password} 
+                  handleChange={this.handleLoginFieldChange} login={this.login}/> 
+              : contents()}
+          </div>
+        </Router>
+        
       </div>
     )
   }
