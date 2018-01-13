@@ -3,14 +3,15 @@ import React from 'react'
 const Notification = ({message}) => {
 
     const style = {
-            color: 'white',
+            color: 'green',
             fontSize: '20px',
             borderStyle: 'solid',
-            borderRadius: '5px',
+            borderRadius: '15px',
             padding: '10px',
+            marginTop: '10px',
             marginBottom: '10px',
             width:'40%',
-            backgroundColor: 'red'
+            backgroundColor: 'white'
     }
 
     if (message.length === 0) {
