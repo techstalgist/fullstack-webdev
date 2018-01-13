@@ -1,13 +1,13 @@
 import React from 'react'
-import Blog from './Blog'
+import BlogRow from './BlogRow'
 
-const Blogs = ({blogs, user, deleteBlog, updateBlog}) => {
+const Blogs = ({blogs}) => {
     
     return (
         <div>
             <h3>existing blogs</h3>
             {blogs.map(blog => 
-                <Blog updateBlog={updateBlog} deleteBlog={deleteBlog} loggedInUser={user} key={blog._id} blog={blog}/>
+                <BlogRow key={blog._id} blog={blog}/>
             )}
         </div>
     )

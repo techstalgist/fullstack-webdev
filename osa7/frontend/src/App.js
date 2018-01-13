@@ -4,6 +4,7 @@ import Notification from './components/Notification'
 import NewBlog from './components/NewBlog'
 import Togglable from './components/Togglable'
 import Blogs from './components/Blogs'
+import Blog from './components/Blog'
 import Users from './components/Users'
 import User from './components/User'
 import blogService from './services/blogs'
@@ -87,11 +88,15 @@ class App extends React.Component {
     })
   }
 
-  componentWillMount() {
+  fetchBlogs = () => {
     blogService.getAll().then(blogs => {
       const sortedBlogs = blogs.sort(this.byLikes)
       this.setState({ blogs: sortedBlogs })
     })
+  }
+
+  componentWillMount() {
+    this.fetchBlogs()
     this.fetchUsers()
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
@@ -109,6 +114,9 @@ class App extends React.Component {
     const userById = (id) => {
       return this.state.users.find(u => u._id === id)
     }
+    const blogById = (id) => {
+      return this.state.blogs.find(b => b._id === id)
+    }
     const contents = () => (
       <div className='contents'>
           <div className="row margin-bottom">
@@ -118,7 +126,10 @@ class App extends React.Component {
           <Togglable buttonLabel="new blog">
             <NewBlog addBlog={this.addBlog}/>
           </Togglable>
-          <Route exact path="/" render={() => <Blogs blogs={this.state.blogs} user={this.state.user} updateBlog={this.updateBlog} deleteBlog={this.deleteBlog}/>} />
+          <Route exact path="/" render={() => <Blogs blogs={this.state.blogs}/>} />
+          <Route exact path="/blogs/:id" render={({match}) =>
+            <Blog blog={blogById(match.params.id)} fetchBlogs={this.fetchBlogs} loggedInUser={this.state.user} updateBlog={this.updateBlog} deleteBlog={this.deleteBlog} />
+          }/>
           <Route exact path="/users" render={() => <Users users={this.state.users}/>} />
           <Route exact path="/users/:id" render={({match}) => 
               <User user={userById(match.params.id)} fetchUsers={this.fetchUsers} />

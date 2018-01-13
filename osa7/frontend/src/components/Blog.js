@@ -2,15 +2,11 @@ import React from 'react'
 import blogService from '../services/blogs'
 
 class Blog extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      showDetails: false
+  
+  componentWillMount() {
+    if (this.props.blog === undefined) {
+      this.props.fetchBlogs()
     }
-  }
-
-  toggleDetails = () => {
-    this.setState({showDetails: !this.state.showDetails})
   }
 
   updateBlog = async (e) => {
@@ -46,24 +42,23 @@ class Blog extends React.Component {
   }
 
   render() {
+    if (this.props.blog === undefined) { return null }
     const {title, author, url, likes, user} = this.props.blog
     const loggedInUser = this.props.loggedInUser
-    const showWhenVisible = { display: this.state.showDetails ? '' : 'none' }
     const canDelete = (loggedInUser && (user.username === loggedInUser.username))
     return (
-      <div className="blog-style">
-        <div onClick={this.toggleDetails} className="basic-info">{title}, author: {author}</div>
-        <div style={showWhenVisible} className="togglable-content">
-          <div className="margin-left-sm">
-            <a href={url}>{url}</a>
-            <div>{likes} likes
-              <button className="margin-left-sm" onClick={this.updateBlog}>like</button>
-            </div>
-            <div>added by {user.name}</div>
-            <div>
-              {canDelete ? <button onClick={this.deleteBlog}>delete</button> : null}
-            </div>
-          </div>
+      <div>
+        <h3>{title}, author: {author}</h3>
+        <a href={url}>{url}</a>
+        <div>
+          {likes} likes
+          <button className="margin-left-sm" onClick={this.updateBlog}>like</button>
+        </div>
+        <div>
+          added by {user.name}
+        </div>
+        <div>
+          {canDelete ? <button onClick={this.deleteBlog}>delete</button> : null}
         </div>
       </div> 
     )
