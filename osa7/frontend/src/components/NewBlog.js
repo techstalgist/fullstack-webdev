@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {newBlog} from '../reducers/blogsReducer'
-import { Grid, Row, Col, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap'
+import { Row, Col, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap'
 
 class NewBlog extends React.Component {
     constructor(props) {
@@ -34,12 +34,12 @@ class NewBlog extends React.Component {
 
     render() {
         return (
-            <Grid>
+            <div>
                 <Row>
-                    <Col><h2>create new</h2></Col>
+                    <Col md={12} xs={12}><h3>create new</h3></Col>
                 </Row>
                 <Row>
-                    <Col md-5 xs-5>
+                    <Col md={7} xs={7}>
                         <form onSubmit={this.createBlog}>
                             <FormGroup>
                                 <ControlLabel>title</ControlLabel>
@@ -48,12 +48,14 @@ class NewBlog extends React.Component {
                                 <FormControl type="text" name="author" value={this.state.author} onChange={this.handleFieldChange}/>
                                 <ControlLabel>url</ControlLabel>
                                 <FormControl type="text" name="url" value={this.state.url} onChange={this.handleFieldChange}/>
-                                <Button bsStyle="success mt-1" type="submit">create</Button>                  
+                                <div className="mt-1">
+                                    <Button bsStyle="success" type="submit">create</Button>                  
+                                </div>
                             </FormGroup>
                         </form>
                     </Col>
                 </Row>
-            </Grid>
+            </div>
         )
     }
 }

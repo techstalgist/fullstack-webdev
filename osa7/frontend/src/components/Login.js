@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {login, fieldChange} from '../reducers/loginReducer'
+import {Grid, Row, Col, FormGroup, FormControl, ControlLabel, Button} from 'react-bootstrap'
 
 class Login extends React.Component {
 
@@ -21,34 +22,28 @@ class Login extends React.Component {
     const {username, password, user} = this.props
     if (user) { return null }
     return (
-      <div>
-        <h2>Log in to application</h2>
-        <form onSubmit={this.handleLogin}>
-          <div className="row">
-            <div className="column left">username</div>
-            <div className="column right"> 
-              <input
-                type="text"
-                name="username"
-                value={username}
-                onChange={this.handleChange}
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="column left">password</div>
-            <div className="column right"> 
-              <input
-                type="password"
-                name="password"
-                value={password}
-                onChange={this.handleChange}
-              />
-            </div>
-          </div>
-          <button>log in</button>
-        </form>
-    </div > 
+      <Grid>
+        <Row>
+          <Col md={12} xs={12}>
+            <h2>Log in to application</h2>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={7} xs={7}>
+            <form onSubmit={this.handleLogin}>
+              <FormGroup>
+                <ControlLabel>username</ControlLabel>
+                <FormControl type="text" name="username" value={username} onChange={this.handleChange}/>               
+                <ControlLabel>password</ControlLabel>
+                <FormControl type="password" name="password" value={password} onChange={this.handleChange}/>               
+                <div className="mt-1">
+                  <Button bsStyle="success" type="submit">log in</Button>                  
+                </div>
+              </FormGroup>
+            </form>
+          </Col>
+        </Row>
+    </Grid > 
     )
   }
 }

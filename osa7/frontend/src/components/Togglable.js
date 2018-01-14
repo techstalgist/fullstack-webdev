@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Button} from 'react-bootstrap'
+import {Grid, Row, Col, Button} from 'react-bootstrap'
 
 class Togglable extends React.Component {
 
@@ -24,15 +24,23 @@ class Togglable extends React.Component {
       const showWhenVisible = { display: this.state.visible ? '' : 'none' }
   
       return (
-        <div>
-          <div style={hideWhenVisible}>
-            <Button onClick={this.toggleVisibility}>{this.props.buttonLabel}</Button>
-          </div>
-          <div style={showWhenVisible}>
-            {this.props.children}
-            <Button onClick={this.toggleVisibility}>cancel</Button>
-          </div>
-        </div>
+        <Grid>
+          <Row>
+            <Col md={12} xs={12}>
+              <div style={hideWhenVisible}>
+                <Button onClick={this.toggleVisibility}>{this.props.buttonLabel}</Button>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12} xs={12}>
+              <div style={showWhenVisible}>
+               {this.props.children}
+               <Button onClick={this.toggleVisibility}>cancel</Button>
+              </div>
+            </Col>
+          </Row>
+        </Grid>
       )
     }
 }

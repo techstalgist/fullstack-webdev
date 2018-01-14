@@ -1,25 +1,30 @@
 import React from 'react'
-import {NavLink} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {logout} from '../reducers/loginReducer'
+import {Navbar, Nav, NavItem, Button} from 'react-bootstrap'
 
-const Menu = ({user, logout}) => {
+const Menu = ({location, user, logout}) => {
 
   return (
-    <div className="row margin-bottom bordered">
-        <div className="column">
-            <NavLink to={"/"}>blogs</NavLink>
-        </div>
-        <div className="column">
-           <NavLink to={"/users"}>users</NavLink>
-        </div>
-        <div className="column">
+    <Navbar>
+        <Navbar.Collapse>
+          <Nav>
+            <NavItem componentClass={Link} href="/" to="/" active={location.pathname === '/'}>
+              blogs
+            </NavItem>
+            <NavItem componentClass={Link} href="/users" to="/users" active={location.pathname === '/users'}>
+              users
+            </NavItem>
+          </Nav>
+           <Navbar.Text>
             <i>{user} logged in</i>
-        </div>
-        <div className="column"> 
-            <button onClick={logout}>logout</button>
-        </div>  
-    </div>
+          </Navbar.Text>
+          <Navbar.Form pullLeft>
+            <Button onClick={logout}>logout</Button>
+          </Navbar.Form>
+        </Navbar.Collapse>
+    </Navbar>
   )
 }
 
@@ -29,7 +34,9 @@ const mapStateToProps = (state) => {
     }
   }
   
-  export default connect(
-    mapStateToProps,
-    {logout}
-  )(Menu)
+export default withRouter(
+    connect(
+      mapStateToProps,
+      {logout}
+    )(Menu)
+)
