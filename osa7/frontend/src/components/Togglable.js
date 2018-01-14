@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Grid, Row, Col, Button} from 'react-bootstrap'
+import {Row, Col, Button} from 'react-bootstrap'
 
 class Togglable extends React.Component {
 
@@ -24,7 +24,7 @@ class Togglable extends React.Component {
       const showWhenVisible = { display: this.state.visible ? '' : 'none' }
   
       return (
-        <Grid>
+        <div>
           <Row>
             <Col md={12} xs={12}>
               <div style={hideWhenVisible}>
@@ -40,7 +40,7 @@ class Togglable extends React.Component {
               </div>
             </Col>
           </Row>
-        </Grid>
+        </div>
       )
     }
 }

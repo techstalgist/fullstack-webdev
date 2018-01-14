@@ -6,7 +6,7 @@ import NewBlog from './NewBlog'
 const FixedContents = ({loggedIn}) => {
     if (!loggedIn) { return null }
     return (
-        <div className='contents'>
+        <div className='container'>
             <Menu />
             <Togglable buttonLabel="new blog">
                 <NewBlog />

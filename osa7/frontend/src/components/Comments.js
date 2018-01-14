@@ -1,5 +1,5 @@
 import React from 'react'
-import {Col, ListGroup, ListGroupItem, FormGroup, InputGroup, FormControl, Button} from 'react-bootstrap'
+import {Row, Col, ListGroup, ListGroupItem, FormGroup, InputGroup, FormControl, Button} from 'react-bootstrap'
 
 const Comments = ({comments, comment, changeComment, addComment}) => {
 
@@ -12,14 +12,17 @@ const Comments = ({comments, comment, changeComment, addComment}) => {
             )}
         </ListGroup>
         <FormGroup>
-            <Col md={7} xs={7}>
-                <InputGroup>
-                    <FormControl value={comment} onChange={changeComment} />
-                    <InputGroup.Button>
-                        <Button bsStyle="primary" onClick={addComment}>add comment</Button>
-                    </InputGroup.Button>
-                </InputGroup>
-            </Col>
+            <Row>
+                <Col md={7} xs={7}>
+                    <InputGroup>
+                        <FormControl value={comment} onChange={changeComment} />
+                        <InputGroup.Button>
+                            <Button bsStyle="primary" onClick={addComment}>add comment</Button>
+                        </InputGroup.Button>
+                    </InputGroup>
+                </Col>
+            </Row>
+            
         </FormGroup>
     </div>
   )
