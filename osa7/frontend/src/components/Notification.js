@@ -1,13 +1,14 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Alert} from 'react-bootstrap'
 
 const Notification = ({message, success}) => {
     if (message.length === 0) {
       return null
     }
-    const cssClass = success ? 'success' : 'error'
+    const cssClass = success ? 'success' : 'danger'
     return (
-      <div className={'message '+ cssClass}>{message}</div>
+      <Alert bsStyle={cssClass}>{message}</Alert>
     )
 }
 

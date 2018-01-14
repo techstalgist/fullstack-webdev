@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {newBlog} from '../reducers/blogsReducer'
+import { Grid, Row, Col, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap'
 
 class NewBlog extends React.Component {
     constructor(props) {
@@ -33,45 +34,26 @@ class NewBlog extends React.Component {
 
     render() {
         return (
-            <div>
-                <h2>create new</h2>
-                <form onSubmit={this.createBlog}>
-                    <div className="row">
-                        <div className="column left">title</div>
-                        <div className="column right">
-                            <input
-                                type="text"
-                                name="title"
-                                value={this.state.title}
-                                onChange={this.handleFieldChange}
-                            />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="column left">author</div>
-                        <div className="column right">
-                            <input
-                                type="text"
-                                name="author"
-                                value={this.state.author}
-                                onChange={this.handleFieldChange}
-                            />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="column left">url</div>
-                        <div className="column right">
-                            <input
-                                type="text"
-                                name="url"
-                                value={this.state.url}
-                                onChange={this.handleFieldChange}
-                            />
-                        </div>
-                    </div>
-                    <button>create</button>
-                </form>
-            </div>
+            <Grid>
+                <Row>
+                    <Col><h2>create new</h2></Col>
+                </Row>
+                <Row>
+                    <Col md-5 xs-5>
+                        <form onSubmit={this.createBlog}>
+                            <FormGroup>
+                                <ControlLabel>title</ControlLabel>
+                                <FormControl type="text" name="title" value={this.state.title} onChange={this.handleFieldChange}/>
+                                <ControlLabel>author</ControlLabel>
+                                <FormControl type="text" name="author" value={this.state.author} onChange={this.handleFieldChange}/>
+                                <ControlLabel>url</ControlLabel>
+                                <FormControl type="text" name="url" value={this.state.url} onChange={this.handleFieldChange}/>
+                                <Button bsStyle="success mt-1" type="submit">create</Button>                  
+                            </FormGroup>
+                        </form>
+                    </Col>
+                </Row>
+            </Grid>
         )
     }
 }

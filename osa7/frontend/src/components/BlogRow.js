@@ -4,13 +4,13 @@ import {Link} from 'react-router-dom'
 const BlogRow = ({blog}) => {
     
     return (
-        <div className="blog-style">
-            <div className="basic-info">
+        <tr>
+            <td>
                 <Link to={`/blogs/${blog._id}`}>
                     {blog.title}, author: {blog.author}
                 </Link>
-            </div>
-      </div> 
+            </td>
+        </tr> 
     )
 }
 

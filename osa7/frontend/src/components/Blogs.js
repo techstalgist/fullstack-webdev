@@ -1,15 +1,20 @@
 import React from 'react'
 import BlogRow from './BlogRow'
 import {connect} from 'react-redux'
+import {Table} from 'react-bootstrap'
 
 const Blogs = ({blogs}) => {
     
     return (
         <div>
             <h3>existing blogs</h3>
-            {blogs.map(blog => 
-                <BlogRow key={blog._id} blog={blog}/>
-            )}
+            <Table striped>
+                <tbody>
+                    {blogs.map(blog => 
+                        <BlogRow key={blog._id} blog={blog}/>
+                    )}
+                </tbody>
+            </Table>
         </div>
     )
 }
