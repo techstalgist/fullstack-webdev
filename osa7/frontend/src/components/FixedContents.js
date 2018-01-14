@@ -3,7 +3,7 @@ import Menu from './Menu'
 import Togglable from './Togglable'
 import NewBlog from './NewBlog'
 
-const Contents = ({loggedIn}) => {
+const FixedContents = ({loggedIn}) => {
     if (!loggedIn) { return null }
     return (
         <div className='contents'>
@@ -15,4 +15,4 @@ const Contents = ({loggedIn}) => {
     )
 }
 
-export default Contents
+export default FixedContents

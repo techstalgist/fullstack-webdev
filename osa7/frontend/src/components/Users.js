@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 const Users = ({users}) => {
     
@@ -26,5 +27,11 @@ const Users = ({users}) => {
     )
 }
 
-export default Users
+const mapStateToProps = (state) => {
+    return {
+        users: state.users.users
+    }
+}
+
+export default connect(mapStateToProps, null)(Users)
 

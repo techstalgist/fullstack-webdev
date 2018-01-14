@@ -3,7 +3,7 @@ import React from 'react'
 class User extends React.Component {
     componentWillMount() {
         if (this.props.user === undefined) {
-            this.props.fetchUsers()
+            console.log(this.props)
         }
     }
 
