@@ -25,20 +25,32 @@ const reducer = (store = getInitialStore(), action) => {
     }
 }
 
+export const loginAction = (user) => {
+    return {
+        type: 'LOGIN',
+        user
+    }
+}
+
 export const login = (credentials) => {
   return async (dispatch) => {
       try {
         const user = await loginService.login(credentials)
         window.localStorage.setItem('loggedUser', JSON.stringify(user))
         blogService.setToken(user.token)
-        dispatch({
-            type: 'LOGIN',
-            user
-        })
+        dispatch(loginAction(user))
       } catch(exception) {
           dispatch(notify('username or password incorrect', false, 4))
       }
   }
+}
+
+export const logout = () => {
+    blogService.setToken(null)
+    window.localStorage.removeItem('loggedUser')
+    return {
+        type: 'LOGOUT'
+    }
 }
 
 export const fieldChange = (field, value) => {
@@ -47,6 +59,6 @@ export const fieldChange = (field, value) => {
       field,
       value
     }
-  }
+}
 
 export default reducer

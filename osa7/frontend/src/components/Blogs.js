@@ -1,5 +1,6 @@
 import React from 'react'
 import BlogRow from './BlogRow'
+import {connect} from 'react-redux'
 
 const Blogs = ({blogs}) => {
     
@@ -13,5 +14,11 @@ const Blogs = ({blogs}) => {
     )
 }
 
-export default Blogs
+const mapStateToProps = (state) => {
+    return {
+        blogs: state.blogs.blogs
+    }
+}
+
+export default connect(mapStateToProps, null)(Blogs)
 

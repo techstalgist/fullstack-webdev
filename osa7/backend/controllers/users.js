@@ -37,7 +37,8 @@ const formatBlog = (blog) => {
         likes: blog.likes,
         author: blog.author,
         title: blog.title,
-        url: blog.url
+        url: blog.url,
+        comments: blog.comments
     }
 }
 

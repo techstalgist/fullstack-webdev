@@ -1,6 +1,7 @@
 import React from 'react'
-import blogService from '../services/blogs'
 import Comments from './Comments'
+import {connect} from 'react-redux'
+import {updateBlog, addComment, deleteBlog, fetchBlogs} from '../reducers/blogsReducer'
 
 class Blog extends React.Component {
   
@@ -22,24 +23,17 @@ class Blog extends React.Component {
     this.setState({comment})
   }
 
-  addComment = async (e) => {
-    const id = this.props.blog._id
+  addComment = (e) => {
     const commentToSend = {
       content: this.state.comment
     }
     this.setState({comment: ''})
-    try {
-      const newComment = await blogService.newComment(id, commentToSend)
-      this.props.addCommentToBlog(id, newComment)
-    } catch (e) {
-      console.log(e)
-    }
+    this.props.addComment(this.props.blog, commentToSend)
   }
 
-  updateBlog = async (e) => {
+  updateBlog = (e) => {
     e.preventDefault()
     const oldBlog = this.props.blog
-
     const blogToSend = {
         title: oldBlog.title,
         author: oldBlog.author,
@@ -47,29 +41,18 @@ class Blog extends React.Component {
         likes: oldBlog.likes + 1,
         user: oldBlog.user._id
     }
-    try {
-        const updatedBlog = await blogService.update(oldBlog._id, blogToSend)
-        this.props.updateBlog(updatedBlog)
-    } catch (e) {
-        console.log(e)
-    }
+    this.props.updateBlog(oldBlog._id, blogToSend)
   }
 
-  deleteBlog = async (e) => {
+  deleteBlog = (e) => {
     const blog = this.props.blog
     const confirmed = window.confirm(`Delete ${blog.title} by ${blog.author} ?`)
     if (confirmed) {
-      try {
-        await blogService.deleteBlog(blog._id)
-        this.props.deleteBlog(blog._id)
-      } catch (e) {
-        console.log(e)
-      } 
+       this.props.deleteBlog(blog)
     }
   }
 
   render() {
-    if (this.props.blog === undefined) { return null }
     const {title, author, url, likes, user, comments} = this.props.blog
     const loggedInUser = this.props.loggedInUser
     const canDelete = (loggedInUser && (user.username === loggedInUser.username))
@@ -94,4 +77,13 @@ class Blog extends React.Component {
   }
 }
 
-export default Blog
+const mapStateToProps = (state) => {
+  return {
+    loggedInUser: state.login.user
+  }
+}
+
+export default connect(
+  mapStateToProps, 
+  {updateBlog, addComment, deleteBlog, fetchBlogs}
+)(Blog)

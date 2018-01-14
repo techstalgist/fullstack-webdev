@@ -1,5 +1,7 @@
 import React from 'react'
 import {NavLink} from 'react-router-dom'
+import {connect} from 'react-redux'
+import {logout} from '../reducers/loginReducer'
 
 const Menu = ({user, logout}) => {
 
@@ -21,4 +23,13 @@ const Menu = ({user, logout}) => {
   )
 }
 
-export default Menu
+const mapStateToProps = (state) => {
+    return {
+      user: state.login.user.name
+    }
+  }
+  
+  export default connect(
+    mapStateToProps,
+    {logout}
+  )(Menu)

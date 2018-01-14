@@ -1,5 +1,6 @@
 import React from 'react'
-import blogService from '../services/blogs'
+import {connect} from 'react-redux'
+import {newBlog} from '../reducers/blogsReducer'
 
 class NewBlog extends React.Component {
     constructor(props) {
@@ -15,24 +16,19 @@ class NewBlog extends React.Component {
         this.setState({[e.target.name]: e.target.value})
     }
 
-    createBlog = async (e) => {
+    createBlog = (e) => {
         e.preventDefault()
         const newBlog = {
             title: this.state.title,
             author: this.state.author,
             url: this.state.url
         }
-        try {
-            const createdBlog = await blogService.create(newBlog)
-            this.setState({
-                title: '',
-                author: '',
-                url: ''
-            })
-            this.props.addBlog(createdBlog)
-        } catch (e) {
-            console.log(e)
-        }
+        this.setState({
+            title: '',
+            author: '',
+            url: ''
+        })
+        this.props.newBlog(newBlog)
     }
 
     render() {
@@ -80,4 +76,4 @@ class NewBlog extends React.Component {
     }
 }
 
-export default NewBlog
+export default connect(null, {newBlog})(NewBlog)

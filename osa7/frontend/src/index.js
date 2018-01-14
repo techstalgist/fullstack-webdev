@@ -5,13 +5,15 @@ import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import loginReducer from './reducers/loginReducer'
+import blogsReducer from './reducers/blogsReducer'
 import notificationReducer from './reducers/notificationReducer'
 import App from './App'
 import './index.css'
 
 const reducer = combineReducers({
   login: loginReducer,
-  notification: notificationReducer
+  notification: notificationReducer,
+  blogs: blogsReducer
 })
 
 const store = createStore(
@@ -23,7 +25,7 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store} >
-    <App />
+    <App store={store}/>
   </Provider>,
   document.getElementById('root')
 )

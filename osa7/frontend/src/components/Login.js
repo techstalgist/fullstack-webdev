@@ -17,7 +17,8 @@ class Login extends React.Component {
   }
 
   render() {
-    const {username, password} = this.props
+    const {username, password, user} = this.props
+    if (user) { return null }
     return (
       <div>
         <h2>Log in to application</h2>
@@ -54,7 +55,8 @@ class Login extends React.Component {
 const mapStateToProps = (state) => {
   return {
     username: state.login.username,
-    password: state.login.password
+    password: state.login.password,
+    user: state.login.user
   }
 }
 
