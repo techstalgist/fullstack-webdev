@@ -39,7 +39,8 @@ class Blog extends React.Component {
         author: oldBlog.author,
         url: oldBlog.url,
         likes: oldBlog.likes + 1,
-        user: oldBlog.user._id
+        user: oldBlog.user._id,
+        comments: oldBlog.comments
     }
     this.props.updateBlog(oldBlog._id, blogToSend)
   }
