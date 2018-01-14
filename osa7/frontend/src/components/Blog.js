@@ -2,6 +2,7 @@ import React from 'react'
 import Comments from './Comments'
 import {connect} from 'react-redux'
 import {updateBlog, addComment, deleteBlog, fetchBlogs} from '../reducers/blogsReducer'
+import {ListGroup, ListGroupItem, Button} from 'react-bootstrap'
 
 class Blog extends React.Component {
   
@@ -60,17 +61,22 @@ class Blog extends React.Component {
     return (
       <div>
         <h3>{title}, author: {author}</h3>
-        <a href={url}>{url}</a>
-        <div>
-          {likes} likes
-          <button className="margin-left-sm" onClick={this.updateBlog}>like</button>
-        </div>
-        <div>
-          added by {user.name}
-        </div>
-        <div>
-          {canDelete ? <button onClick={this.deleteBlog}>delete</button> : null}
-        </div>
+        <ListGroup>
+          <ListGroupItem>
+            address: <a href={url}>{url}</a>
+          </ListGroupItem>
+          <ListGroupItem>
+            <span className={"mr-1"}>{likes} likes</span>
+            <Button bsStyle="primary" onClick={this.updateBlog}>like</Button>
+          </ListGroupItem>
+          <ListGroupItem>
+            added by: {user.name}
+          </ListGroupItem>
+          <ListGroupItem>
+          {canDelete ? <Button bsStyle="danger" onClick={this.deleteBlog}>delete</Button> : null}
+          </ListGroupItem>
+        </ListGroup>
+        
         <Comments comments={comments} comment={this.state.comment} 
           changeComment={this.changeComment} addComment={this.addComment} />
       </div> 

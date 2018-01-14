@@ -9,7 +9,7 @@ class User extends React.Component {
         return (
             <div>
                 <h3>{user.name}</h3>
-                <h4>Added blogs</h4>
+                <h4 className="mt-1">Added blogs</h4>
                 <ListGroup>
                     {user.blogs.map(b => (
                         <ListGroupItem key={b._id}>
