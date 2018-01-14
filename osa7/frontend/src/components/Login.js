@@ -8,12 +8,13 @@ class Login extends React.Component {
     this.props.fieldChange(e.target.name, e.target.value)
   }
 
-  handleLogin = (e) => {
+  handleLogin = async(e) => {
     e.preventDefault()
-    this.props.login({
+    await this.props.login({
       username: this.props.username,
       password: this.props.password
     })
+    this.props.history.push("/")
   }
 
   render() {

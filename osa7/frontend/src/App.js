@@ -7,11 +7,29 @@ import blogService from './services/blogs'
 import userService from './services/users'
 import {fetchBlogs} from './reducers/blogsReducer'
 import {loginAction} from './reducers/loginReducer'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import Blogs from './components/Blogs'
 import Users from './components/Users'
 import User from './components/User'
 import BlogContainer from './components/BlogContainer'
+
+const PrivateRoute = ({ component: Component, loggedIn, ...rest }) => {
+  const renderComponent = (props) => {
+    if (loggedIn) {
+      return (
+        <Component {...props} />
+      )
+    } else {
+      return (
+        <Redirect to="/login" />
+      )
+    }
+  }
+  return (
+    <Route {...rest} render={renderComponent}/>
+  )
+}
+
 
 class App extends React.Component {
   constructor(props) {
@@ -38,6 +56,7 @@ class App extends React.Component {
   }
 
   render() {
+    const {loggedIn} = this.props
     const userById = (users, id) => {
       return users.find(u => u._id === id)
     }
@@ -47,10 +66,10 @@ class App extends React.Component {
         <Router>
           <div>
             <Notification />
-            <Login />
-            <Contents users={this.state.users} fetchUsers={this.fetchUsers} />
-            <Route exact path="/" component={Blogs}/>
-            <Route path="/blogs/:id" component={BlogContainer}/>
+            <Contents loggedIn={loggedIn} />
+            <Route path="/login" component={Login} />
+            <PrivateRoute exact path="/" component={Blogs} loggedIn={loggedIn}/>
+            <PrivateRoute path="/blogs/:id" component={BlogContainer} loggedIn={loggedIn}/>
             <Route exact path="/users" render={() => <Users users={this.state.users}/>} />
             <Route exact path="/users/:id" render={({match}) => 
                 <User user={userById(this.state.users, match.params.id)} fetchUsers={this.fetchUsers} />
@@ -62,4 +81,10 @@ class App extends React.Component {
   }
 }
 
-export default connect(null, {fetchBlogs, loginAction})(App)
+const mapStateToProps = (state) => {
+  return {
+    loggedIn: state.login.user !== null
+  }
+}
+
+export default connect(mapStateToProps, {fetchBlogs, loginAction})(App)
